@@ -6,10 +6,12 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import kotlin.math.round
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -25,6 +27,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     var started = false
     var durationInMs: Float = 0.0F
     var z = 0
+
+    var cxt: Context = this
 
 
     @SuppressLint("SetTextI18n")
@@ -85,5 +89,44 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         )
 
 
+    }
+
+    private fun saveToFile(dateiname: String, text: String): Boolean {
+
+        //Wahrheitswert, um zu prüfen, ob das Speichern erfolgreich war
+        var b = true
+        var fos: FileOutputStream? = null
+        try {
+
+            //Öffne privaten FileOutputStream
+            fos = cxt.openFileOutput(dateiname, MODE_PRIVATE)
+        } catch (e: FileNotFoundException) {
+
+            //Fehler beim Speichern
+            b = false
+        }
+        try {
+
+            //Schreibe Text in die Datei
+            if (fos != null) {
+                fos.write(text.toByteArray())
+            }
+        } catch (e: IOException) {
+
+            //Fehler beim Speichern
+            b = false
+        }
+        try {
+
+            //Schließe den FileOutputStream
+            if (fos != null) {
+                fos.close()
+            }
+        } catch (e: IOException) {
+
+            //Fehler beim Speichern
+            b = false
+        }
+        return b
     }
 }
