@@ -7,6 +7,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.InputStreamReader
@@ -14,6 +15,7 @@ import java.io.OutputStreamWriter
 import java.time.LocalDateTime
 import kotlin.math.pow
 import kotlin.math.round
+
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
@@ -93,10 +95,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             val t = content()
             if (t.isNotEmpty()) {
                 val lines = t.split("\n")
-                var output: String = ""
-                for (x in 0..lines.size - 2)
-                    output += "Line${x}: ${lines[x]}"
-                acceleroMeter_data.text = lines[lines.size - 1]
+
+                textHistory.movementMethod = ScrollingMovementMethod()
+                textHistory.text = content()
             }
 
             return@setOnLongClickListener true
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         buttonWrite.setOnClickListener {
             write(
                 Context.MODE_APPEND,
-                "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m"
+                "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m;\n"
             )
         }
 
