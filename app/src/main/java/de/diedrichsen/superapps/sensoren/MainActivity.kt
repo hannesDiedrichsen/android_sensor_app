@@ -65,10 +65,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 ) / 100
                 freeFall.text = "Dauer des freien Falls: ${durationInMs}s"
                 distTextView.text = "ca. ${dist}m"
-                write(
-                    Context.MODE_APPEND,
-                    "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m"
-                )
+
             }
             if (xyzAcc > 5) started = false
         }
@@ -105,6 +102,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             return@setOnLongClickListener true
 
 
+        }
+
+        buttonWrite.setOnClickListener {
+            write(
+                Context.MODE_APPEND,
+                "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m"
+            )
         }
 
 
