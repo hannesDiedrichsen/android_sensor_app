@@ -7,7 +7,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.InputStreamReader
@@ -66,11 +65,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 ) / 100
                 freeFall.text = "Dauer des freien Falls: ${durationInMs}s"
                 distTextView.text = "ca. ${dist}m"
-
+                write(
+                    Context.MODE_APPEND,
+                    "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m"
+                )
             }
-            if (xyzAcc > 5) {
-                started = false
-            }
+            if (xyzAcc > 5) started = false
         }
 
     }
@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -95,7 +94,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             start = false
             buttonRes.text = "Resume"
             val t = content()
-            acceleroMeter_data.movementMethod = ScrollingMovementMethod()
             if (t.isNotEmpty()) {
                 val lines = t.split("\n")
                 var output: String = ""
@@ -107,13 +105,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             return@setOnLongClickListener true
 
 
-        }
-
-        buttonWrite.setOnClickListener {
-            write(
-                Context.MODE_APPEND,
-                "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m"
-            )
         }
 
 
