@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var dist: Float = 0.0F
     private var z = 0
     private var start: Boolean = true
-
+    private var onStartUp: Boolean = true
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
@@ -43,12 +43,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         xyzAcc = xacc * xacc + yacc * yacc + zacc * zacc
         xyzAcc = xyzAcc.toDouble().pow(0.5).toFloat()
 
-        if (z % 100 == 0 && start) {
-            acceleroMeter_data.text = "X: $xacc \n Y: $yacc \n Z: $zacc"
+        if (onStartUp) {
+            onStartUp = false
+            showContent()
         }
 
         if (z % 100 == 0) {
             xyzAccelerometer.text = "Gesamtbeschleunigung: \n $xyzAcc"
+            acceleroMeter_data.text = "X: $xacc \n Y: $yacc \n Z: $zacc"
             z = 0
         }
 
@@ -57,10 +59,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             started = true
         } else if (started) {
             stopTime = System.currentTimeMillis()
-
-
             if ((stopTime - startTime) / 1000F > durationInMs) {
-                // Free fall ended
+                // New fall record
                 durationInMs = (stopTime - startTime) / 1000F
                 dist = round(
                     (0.5 * 9.81 * durationInMs.toDouble().pow(2.0)).toFloat() * 100
@@ -77,10 +77,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Reset the counter to zero
         buttonRes.setOnClickListener {
             durationInMs = 0.0F
             freeFall.text = "Dauer des freien Falls: ${durationInMs}s"
@@ -89,27 +91,20 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             start = true
         }
 
-        buttonRes.setOnLongClickListener {
-            start = false
-            buttonRes.text = "Resume"
-            val t = content()
-            if (t.isNotEmpty()) {
-                val lines = t.split("\n")
 
-                textHistory.movementMethod = ScrollingMovementMethod()
-                textHistory.text = content()
-            }
-
-            return@setOnLongClickListener true
-
-
-        }
-
+        // Write latest freefall data with time stamp and update output
         buttonWrite.setOnClickListener {
             write(
                 Context.MODE_APPEND,
                 "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m;\n"
             )
+            showContent()
+        }
+
+        buttonWrite.setOnLongClickListener {
+            write(Context.MODE_PRIVATE, "...")
+            showContent()
+            return@setOnLongClickListener true
         }
 
 
@@ -124,6 +119,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
 
     }
+
 
     private fun write(datamode: Int, output: String) {
         val file = openFileOutput("data.txt", datamode)
@@ -148,7 +144,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         return t
     }
 
+    private fun showContent() {
+        start = false
+        val t = content()
+        if (t.isNotEmpty()) {
+            //val lines = t.split("\n")
 
+            textHistory.movementMethod = ScrollingMovementMethod()
+            textHistory.text = content()
+        }
+    }
 }
 
 
