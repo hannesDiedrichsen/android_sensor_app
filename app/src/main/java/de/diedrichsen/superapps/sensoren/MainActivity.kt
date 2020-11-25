@@ -2,12 +2,16 @@ package de.diedrichsen.superapps.sensoren
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.InputStreamReader
@@ -16,8 +20,25 @@ import java.time.LocalDateTime
 import kotlin.math.pow
 import kotlin.math.round
 
-
 class MainActivity : AppCompatActivity(), SensorEventListener {
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.smenu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
     private lateinit var sensorManager: SensorManager
 
     private var xacc: Float = 0.0F
@@ -33,6 +54,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var z = 0
     private var start: Boolean = true
     private var onStartUp: Boolean = true
+    private var sensitivity: Float = 5F
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
@@ -54,7 +76,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             z = 0
         }
 
-        if (!started && xyzAcc < 5) {
+        if (!started && xyzAcc < sensitivity) {
             startTime = System.currentTimeMillis()
             started = true
         } else if (started) {
@@ -69,7 +91,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 distTextView.text = "ca. ${dist}m"
 
             }
-            if (xyzAcc > 5) started = false
+            if (xyzAcc > sensitivity) started = false
         }
 
     }
@@ -102,8 +124,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
         buttonWrite.setOnLongClickListener {
-            write(Context.MODE_PRIVATE, "...")
-            showContent()
+            write(Context.MODE_PRIVATE, "")
+            textHistory.text = "DELETED"
             return@setOnLongClickListener true
         }
 

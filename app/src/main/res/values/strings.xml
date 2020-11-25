@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Sensoren</string>
+    <string name="xyzAcc">0</string>
+    <string name="freeFall">Dauer des freien Falls: 0s</string>
+    <string name="distTextView">ca. 0m</string>
+    <string name="reset">Reset</string>
+    <string name="accDataView">x: 0
+        y: 0
+        z: 0
+    </string>
+    <string name="saveButton">Save</string>
+    <string name="settingsView">Start counting xyz acc under: 5</string>
 </resources>
