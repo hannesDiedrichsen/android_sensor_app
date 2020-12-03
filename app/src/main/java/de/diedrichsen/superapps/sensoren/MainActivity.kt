@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
 
-    var pref = applicationContext.getSharedPreferences("MyPref", 0)
-    var editor = pref.edit()
+//    var pref = applicationContext.getSharedPreferences("MyPref", 0)
+//    var editor = pref.edit()
 
 
     private var xacc: Float = 0.0F
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var z = 0
     private var start: Boolean = true
     private var onStartUp: Boolean = true
-    private var sensitivity: Float = pref.getFloat("Limit", 5F)
+    private var sensitivity: Float = 5F //pref.getFloat("Limit", 5F)
 
 
     @SuppressLint("SetTextI18n")
