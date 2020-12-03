@@ -20,6 +20,7 @@ import java.time.LocalDateTime
 import kotlin.math.pow
 import kotlin.math.round
 
+
 class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -41,10 +42,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
 
+    var pref = applicationContext.getSharedPreferences("MyPref", 0)
+    var editor = pref.edit()
+
+
     private var xacc: Float = 0.0F
     private var yacc: Float = 0.0F
     private var zacc: Float = 0.0F
     private var xyzAcc: Float = 0.0F
+
 
     private var startTime = System.currentTimeMillis()
     private var stopTime = System.currentTimeMillis()
@@ -54,7 +60,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var z = 0
     private var start: Boolean = true
     private var onStartUp: Boolean = true
-    private var sensitivity: Float = 5F
+    private var sensitivity: Float = pref.getFloat("Limit", 5F)
+
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
@@ -143,7 +150,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
 
-    private fun write(datamode: Int, output: String) {
+    fun write(datamode: Int, output: String) {
         val file = openFileOutput("data.txt", datamode)
         val writer = OutputStreamWriter(file)
         writer.write(output)

@@ -9,5 +9,5 @@
         z: 0
     </string>
     <string name="saveButton">Save</string>
-    <string name="settingsView">Start counting xyz acc under: 5</string>
+    <string name="settingsView">Start counting xyz acc under: </string>
 </resources>

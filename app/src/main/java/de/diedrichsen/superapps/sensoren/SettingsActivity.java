@@ -1,5 +1,6 @@
 package de.diedrichsen.superapps.sensoren;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SeekBar;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,26 +23,31 @@ public class SettingsActivity extends AppCompatActivity {
         final TextView sView = (TextView) findViewById(R.id.settingsView);
         // Initialisieren der App Bar und Aktivieren des Up-Buttons
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+//        final SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+//        final SharedPreferences.Editor editor = pref.edit();
+//
 
 
         // actionBar.setTitle(getString(R.string.action_settings));
 
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sView.setText(progress);
+                sView.setText("Start counting xyz acc under: " + progress / 10);
+                //editor.putFloat("Limit", progress / 10);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                return;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                return;
             }
         });
 
