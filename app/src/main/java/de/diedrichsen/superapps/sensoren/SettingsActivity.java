@@ -19,8 +19,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         // View-Elemente aus XML-Layout Datei erzeugen lassen
         setContentView(R.layout.activity_settings);
-        SeekBar seekBar = (SeekBar) findViewById(R.id.settingsSeekbar);
-        final TextView sView = (TextView) findViewById(R.id.settingsView);
+        SeekBar seekBar = findViewById(R.id.settingsSeekbar);
+        final TextView sView = findViewById(R.id.settingsView);
         // Initialisieren der App Bar und Aktivieren des Up-Buttons
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -38,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sView.setText("Start counting xyz acc under: " + progress / 10);
+                sView.setText("Start counting xyz acc under: " + (float) progress / 10);
                 //editor.putFloat("Limit", progress / 10);
             }
 

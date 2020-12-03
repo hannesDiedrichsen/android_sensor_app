@@ -53,7 +53,7 @@
     <Button
         android:id="@+id/buttonRes"
         android:layout_width="219dp"
-        android:layout_height="59dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
@@ -75,22 +75,26 @@
 
     <Button
         android:id="@+id/buttonWrite"
-        android:layout_width="147dp"
+        android:layout_width="0dp"
         android:layout_height="62dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/saveButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonRes"
         app:layout_constraintTop_toBottomOf="@+id/xyzAccelerometer"
         app:layout_constraintVertical_bias="0.512" />
 
     <TextView
         android:id="@+id/textHistory"
-        android:layout_width="379dp"
-        android:layout_height="180sp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/xyzAccelerometer"
