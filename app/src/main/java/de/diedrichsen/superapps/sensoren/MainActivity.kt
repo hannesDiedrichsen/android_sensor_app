@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         // Reset the counter to zero
         buttonRes.setOnClickListener {
-            durationInMs = 0.0F
-            freeFall.text = "Dauer des freien Falls: ${durationInMs}s"
+            duration = 0.0F
+            freeFall.text = "Dauer des freien Falls: ${duration}s"
             distTextView.text = "RESET"
             buttonRes.text = "RESET"
             start = true
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         buttonWrite.setOnClickListener {
             write(
                 Context.MODE_APPEND,
-                "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m;\n",
+                "Timestamp: ${LocalDateTime.now()}, Duration: ${duration}s, Dist: ${dist}m;\n",
                 "data.txt"
             )
             showContent()
@@ -106,12 +106,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var startTime = System.currentTimeMillis()
     private var stopTime = System.currentTimeMillis()
     private var started = false
-    private var durationInMs: Float = 0.0F
+    private var duration: Float = 0.0F
     private var dist: Float = 0.0F
     private var z = 0
     private var start: Boolean = true
     private var onStartUp: Boolean = true
     private var sensitivity: Float = 5F
+    var slow_mode = false
 
 
     @SuppressLint("SetTextI18n")
@@ -140,13 +141,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             started = true
         } else if (started) {
             stopTime = System.currentTimeMillis()
-            if ((stopTime - startTime) / 1000F > durationInMs) {
+            if ((stopTime - startTime) / 1000F > duration) {
                 // New fall record
-                durationInMs = (stopTime - startTime) / 1000F
+                duration = (stopTime - startTime) / 1000F
                 dist = round(
-                    (0.5 * 9.81 * durationInMs.toDouble().pow(2.0)).toFloat() * 100
+                    (0.5 * 9.81 * duration.toDouble().pow(2.0)).toFloat() * 100
                 ) / 100
-                freeFall.text = "Dauer des freien Falls: ${durationInMs}s"
+                freeFall.text = "Dauer des freien Falls: ${duration}s"
                 distTextView.text = "ca. ${dist}m"
 
             }

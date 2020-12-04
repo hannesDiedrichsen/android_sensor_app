@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -23,11 +25,12 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-
         // View-Elemente aus XML-Layout Datei erzeugen lassen
         setContentView(R.layout.activity_settings);
         SeekBar seekBar = findViewById(R.id.settingsSeekbar);
         final TextView sView = findViewById(R.id.settingsView);
+        final CheckBox checkBox = findViewById(R.id.checkBox);
+
         // Initialisieren der App Bar und Aktivieren des Up-Buttons
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -39,8 +42,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         sView.setText(getString(R.string.settings_sensi_text) + pref.getFloat("sensi", 5F));
 
-
-
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                editor.putBoolean("slow_mode", b);
+                editor.apply();
+            }
+        });
 
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -62,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NotNull MenuItem item) {
