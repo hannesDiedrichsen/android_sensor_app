@@ -142,10 +142,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             if ((stopTime - startTime) / 1000F > duration) {
                 // New fall record
                 duration = (stopTime - startTime) / 1000F
-                dist = round(
-                    (0.5 * 9.81 * duration.toDouble().pow(2.0)).toFloat() * 100
-                ) / 100
-                freeFall.text = "Dauer des freien Falls: ${duration}s"
+                dist = round((0.5 * 9.81 * duration.toDouble().pow(2.0)).toFloat() * 100) / 100
+                freeFall.text = "Dauer des freien Falls: ${round(duration * 100) / 100}s"
                 distTextView.text = "ca. ${dist}m"
 
             }
