@@ -10,4 +10,5 @@
     </string>
     <string name="saveButton">Save</string>
     <string name="settingsView">Start counting xyz acc under: </string>
+    <string name="settings_sensi_text">Start counting xyz acc under: \</string>
 </resources>

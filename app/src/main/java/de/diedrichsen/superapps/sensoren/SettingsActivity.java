@@ -1,6 +1,8 @@
 package de.diedrichsen.superapps.sensoren;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SeekBar;
@@ -10,12 +12,17 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 public class SettingsActivity extends AppCompatActivity {
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         // View-Elemente aus XML-Layout Datei erzeugen lassen
         setContentView(R.layout.activity_settings);
@@ -26,12 +33,14 @@ public class SettingsActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-//        final SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-//        final SharedPreferences.Editor editor = pref.edit();
-//
+
+        final SharedPreferences pref = getApplicationContext().getSharedPreferences("data.pr", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = pref.edit();
+
+        sView.setText(getString(R.string.settings_sensi_text) + pref.getFloat("sensi", 5F));
 
 
-        // actionBar.setTitle(getString(R.string.action_settings));
+
 
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -39,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sView.setText("Start counting xyz acc under: " + (float) progress / 10);
-                //editor.putFloat("Limit", progress / 10);
+                editor.putFloat("sensi", (float) progress / 10);
             }
 
             @Override
@@ -48,13 +57,14 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                editor.apply();
             }
         });
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;

@@ -1,0 +1,16 @@
+Index: app/src/main/res/layout/switch_item.xml
+===================================================================
+--- app/src/main/res/layout/switch_item.xml	(date 0)
++++ app/src/main/res/layout/switch_item.xml	(date 0)
+@@ -1,11 +0,0 @@
+-<RelativeLayout
+-    xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent">
+-
+-    <Switch
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_centerHorizontal="true"
+-        android:layout_centerVertical="true" />
+-</RelativeLayout>

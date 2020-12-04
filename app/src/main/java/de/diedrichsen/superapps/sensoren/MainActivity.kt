@@ -14,6 +14,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.time.LocalDateTime
@@ -21,13 +22,67 @@ import kotlin.math.pow
 import kotlin.math.round
 
 
+@Suppress("NAME_SHADOWING")
 class MainActivity : AppCompatActivity(), SensorEventListener {
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.smenu, menu)
         return true
     }
+
+    @SuppressLint("SetTextI18n")
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Reset the counter to zero
+        buttonRes.setOnClickListener {
+            durationInMs = 0.0F
+            freeFall.text = "Dauer des freien Falls: ${durationInMs}s"
+            distTextView.text = "RESET"
+            buttonRes.text = "RESET"
+            start = true
+        }
+
+        val sStorage = applicationContext.getSharedPreferences("data.pr", Context.MODE_PRIVATE)
+        // val sWriter = sStorage.edit()
+
+
+        sensitivity = sStorage.getFloat("sensi", 5F)
+
+
+
+        // Write latest freefall data with time stamp and update output
+        buttonWrite.setOnClickListener {
+            write(
+                Context.MODE_APPEND,
+                "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m;\n",
+                "data.txt"
+            )
+            showContent()
+        }
+
+        buttonWrite.setOnLongClickListener {
+            write(Context.MODE_PRIVATE, "", "data.txt")
+            textHistory.text = "DELETED"
+            return@setOnLongClickListener true
+        }
+
+
+
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorManager.registerListener(
+            this,
+            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+            SensorManager.SENSOR_DELAY_FASTEST
+        )
+
+
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -41,10 +96,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
 
     private lateinit var sensorManager: SensorManager
-
-//    var pref = applicationContext.getSharedPreferences("MyPref", 0)
-//    var editor = pref.edit()
-
 
     private var xacc: Float = 0.0F
     private var yacc: Float = 0.0F
@@ -60,7 +111,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var z = 0
     private var start: Boolean = true
     private var onStartUp: Boolean = true
-    private var sensitivity: Float = 5F //pref.getFloat("Limit", 5F)
+    private var sensitivity: Float = 5F
 
 
     @SuppressLint("SetTextI18n")
@@ -71,6 +122,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         zacc = event.values[2]
         xyzAcc = xacc * xacc + yacc * yacc + zacc * zacc
         xyzAcc = xyzAcc.toDouble().pow(0.5).toFloat()
+
 
         if (onStartUp) {
             onStartUp = false
@@ -106,62 +158,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Reset the counter to zero
-        buttonRes.setOnClickListener {
-            durationInMs = 0.0F
-            freeFall.text = "Dauer des freien Falls: ${durationInMs}s"
-            distTextView.text = "RESET"
-            buttonRes.text = "RESET"
-            start = true
-        }
-
-
-        // Write latest freefall data with time stamp and update output
-        buttonWrite.setOnClickListener {
-            write(
-                Context.MODE_APPEND,
-                "Timestamp: ${LocalDateTime.now()}, Duration: ${durationInMs}s, Dist: ${dist}m;\n"
-            )
-            showContent()
-        }
-
-        buttonWrite.setOnLongClickListener {
-            write(Context.MODE_PRIVATE, "")
-            textHistory.text = "DELETED"
-            return@setOnLongClickListener true
-        }
 
 
 
-
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensorManager.registerListener(
-            this,
-            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-            SensorManager.SENSOR_DELAY_FASTEST
-        )
-
-
-    }
-
-
-    fun write(datamode: Int, output: String) {
-        val file = openFileOutput("data.txt", datamode)
+    fun write(datamode: Int, output: String, file: String) {
+        val file = openFileOutput(file, datamode)
         val writer = OutputStreamWriter(file)
         writer.write(output)
         writer.close()
         file.close()
     }
 
-    private fun content(): String {
+    private fun content(file: String): String {
         var t: String
         try {
-            val file = openFileInput("data.txt")
+            val file: FileInputStream = openFileInput(file)
             val reader = InputStreamReader(file)
             t = reader.readText()
             reader.close()
@@ -175,14 +186,26 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private fun showContent() {
         start = false
-        val t = content()
+        val t = content("data.txt")
         if (t.isNotEmpty()) {
             //val lines = t.split("\n")
 
             textHistory.movementMethod = ScrollingMovementMethod()
-            textHistory.text = content()
+            textHistory.text = content("data.txt")
         }
     }
+
+
+
+    override fun onRestart() {
+        super.onRestart()
+        this.recreate()
+    }
+
+
 }
+
+
+
 
 
