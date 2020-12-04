@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        showContent()
+
         // Reset the counter to zero
         buttonRes.setOnClickListener {
             duration = 0.0F
@@ -125,10 +127,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         xyzAcc = xyzAcc.toDouble().pow(0.5).toFloat()
 
 
-        if (onStartUp) {
-            onStartUp = false
-            showContent()
-        }
 
         if (z % 100 == 0) {
             xyzAccelerometer.text = "Gesamtbeschleunigung: \n $xyzAcc"
