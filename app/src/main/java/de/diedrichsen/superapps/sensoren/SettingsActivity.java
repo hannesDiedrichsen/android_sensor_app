@@ -40,7 +40,8 @@ public class SettingsActivity extends AppCompatActivity {
         final SharedPreferences pref = getApplicationContext().getSharedPreferences("data.pr", Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = pref.edit();
 
-        sView.setText(getString(R.string.settings_sensi_text) + pref.getFloat("sensi", 5F));
+        sView.setText(getString(R.string.settingsSensiText) + pref.getFloat("sensi", 5F));
+        seekBar.setProgress((int) (pref.getFloat("sensi", 5F) * 10));
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -55,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sView.setText("Start counting xyz acc under: " + (float) progress / 10);
+                sView.setText(getString(R.string.settingsSensiText) + (float) progress / 10);
                 editor.putFloat("sensi", (float) progress / 10);
             }
 

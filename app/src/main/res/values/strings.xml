@@ -1,15 +1,16 @@
 <resources>
     <string name="app_name">Sensoren</string>
     <string name="xyzAcc">0</string>
-    <string name="freeFall">Dauer des freien Falls: 0s</string>
-    <string name="distTextView">ca. 0m</string>
-    <string name="reset">Reset</string>
+    <string name="freeFall">Fallzeit: 0s</string>
+    <string name="distTextView">Fallstrecke: 0m</string>
+    <string name="reset">Neuer Fall</string>
     <string name="accDataView">x: 0
         y: 0
         z: 0
     </string>
-    <string name="saveButton">Save</string>
-    <string name="settingsView">Start counting xyz acc under: </string>
-    <string name="settings_sensi_text">Start counting xyz acc under: \</string>
+    <string name="saveButton">Speichern</string>
+    <string name="settingsSensiText">Zeitmessung startet unter: \</string>
     <string name="settings_slow_mode_checkbox">Slow mode</string>
+    <string name="options_settings">Einstellungen</string>
+    <string name="history_header">Gespeicherte Daten:</string>
 </resources>

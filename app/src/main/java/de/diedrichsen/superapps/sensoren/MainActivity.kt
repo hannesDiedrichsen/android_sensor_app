@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // Reset the counter to zero
         buttonRes.setOnClickListener {
             duration = 0.0F
-            freeFall.text = "Dauer des freien Falls: ${duration}s"
+            freeFall.text = "Fallzeit: ${duration}s"
             distTextView.text = "RESET"
             buttonRes.text = "RESET"
             start = true
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         buttonWrite.setOnClickListener {
             write(
                 Context.MODE_APPEND,
-                "Timestamp: ${LocalDateTime.now()}, Duration: ${duration}s, Dist: ${dist}m;\n",
+                "Zeit: ${LocalDateTime.now()}, Dauer: ${duration}s, Strecke: ${dist}m;\n",
                 "data.txt"
             )
             showContent()
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         buttonWrite.setOnLongClickListener {
             write(Context.MODE_PRIVATE, "", "data.txt")
-            textHistory.text = "DELETED"
+            textHistory.text = "GELÖSCHT"
             return@setOnLongClickListener true
         }
 
