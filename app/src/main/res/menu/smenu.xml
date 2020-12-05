@@ -5,4 +5,7 @@
     <item
         android:id="@+id/menu"
         android:title="@string/options_settings" />
+    <item
+        android:id="@+id/delete"
+        android:title="@string/menu_delete" />
 </menu>

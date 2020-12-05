@@ -39,22 +39,23 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         showContent()
 
+
+        val sStorage = applicationContext.getSharedPreferences("data.pr", Context.MODE_PRIVATE)
+        // val sEditor = sStorage.edit()
+
+
+        // Read preferences
+        sensitivity = sStorage.getFloat("sensi", 5F)
+        gAcc = sStorage.getFloat("gAcc", 9.81F)
+
+
         // Reset the counter to zero
         buttonRes.setOnClickListener {
             duration = 0.0F
-            freeFall.text = "Fallzeit: ${duration}s"
-            distTextView.text = "RESET"
-            buttonRes.text = "RESET"
+            freeFall.text = "Fallzeit: 0s"
+            distTextView.text = "Fallstrecke: 0m"
             start = true
         }
-
-        val sStorage = applicationContext.getSharedPreferences("data.pr", Context.MODE_PRIVATE)
-        // val sWriter = sStorage.edit()
-
-
-        sensitivity = sStorage.getFloat("sensi", 5F)
-
-
 
         // Write latest freefall data with time stamp and update output
         buttonWrite.setOnClickListener {
@@ -65,13 +66,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             )
             showContent()
         }
-
-        buttonWrite.setOnLongClickListener {
-            write(Context.MODE_PRIVATE, "", "data.txt")
-            textHistory.text = "GELÖSCHT"
-            return@setOnLongClickListener true
-        }
-
 
 
 
@@ -90,6 +84,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         return when (item.itemId) {
             R.id.menu -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+            R.id.delete -> {
+                write(Context.MODE_PRIVATE, "", "data.txt")
+                textHistory.text = getString(R.string.message_afterDeleteHistory)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -114,6 +113,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var start: Boolean = true
     private var onStartUp: Boolean = true
     private var sensitivity: Float = 5F
+    private var gAcc: Float = 9.81F
     var slow_mode = false
 
 
@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             if ((stopTime - startTime) / 1000F > duration) {
                 // New fall record
                 duration = (stopTime - startTime) / 1000F
-                dist = round((0.5 * 9.81 * duration.toDouble().pow(2.0)).toFloat() * 100) / 100
+                dist = round((0.5 * gAcc * duration.toDouble().pow(2.0)).toFloat() * 100) / 100
                 freeFall.text = "Dauer des freien Falls: ${round(duration * 100) / 100}s"
                 distTextView.text = "ca. ${dist}m"
 

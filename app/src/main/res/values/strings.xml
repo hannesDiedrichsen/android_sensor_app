@@ -13,4 +13,8 @@
     <string name="settings_slow_mode_checkbox">Slow mode</string>
     <string name="options_settings">Einstellungen</string>
     <string name="history_header">Gespeicherte Daten:</string>
+    <string name="menu_delete">Daten löschen</string>
+    <string name="settings_gAccText">Ortsfaktor:</string>
+    <string name="settings_gAcc_hint">z.B. 9.81</string>
+    <string name="message_afterDeleteHistory">GELÖSCHT</string>
 </resources>
