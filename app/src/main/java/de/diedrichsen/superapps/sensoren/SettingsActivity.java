@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class SettingsActivity extends AppCompatActivity {
 
 
@@ -88,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (gAcc.getText() != null && gAcc.getText().length() > 0) {
+                if (gAcc.getText() != null && gAcc.getText().length() > 0 && !Objects.equals(gAcc.getText().toString(), "-")) {
                     sEditor.putFloat("gAcc", Float.parseFloat(gAcc.getText().toString()));
                     sEditor.apply();
                 }
