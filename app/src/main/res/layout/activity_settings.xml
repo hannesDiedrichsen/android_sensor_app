@@ -62,7 +62,7 @@
         android:ems="10"
         android:hint="@string/settings_gAcc_hint"
         android:inputType="numberSigned|numberDecimal|number"
-        android:maxLength="4"
+        android:maxLength="6"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/checkBox"
         tools:inputType="numberSigned" />

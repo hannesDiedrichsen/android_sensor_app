@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         buttonWrite.setOnClickListener {
             write(
                 Context.MODE_APPEND,
-                "Zeit: ${LocalDateTime.now()}, Dauer: ${duration}s, Strecke: ${dist}m;\n",
+                "Zeit: ${LocalDateTime.now()}, Dauer: ${duration}s, Strecke(g=${gAcc}m/s^2): ${dist}m;\n",
                 "data.txt"
             )
             showContent()
