@@ -2,13 +2,13 @@ package de.diedrichsen.superapps.sensoren;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -34,8 +34,8 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         SeekBar seekBar = findViewById(R.id.settingsSeekbar);
         final TextView sView = findViewById(R.id.settingsView);
-        final CheckBox checkBox = findViewById(R.id.checkBox);
         final EditText gAcc = findViewById(R.id.settings_gAcc);
+        final TextView exportData = findViewById(R.id.export_data);
 
         // Initialisieren der App Bar und Aktivieren des Up-Buttons
         ActionBar actionBar = getSupportActionBar();
@@ -50,13 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
         seekBar.setProgress((int) (sStorage.getFloat("sensi", 5F) * 10));
         gAcc.setText(String.valueOf(sStorage.getFloat("gAcc", 9.81F)));
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                sEditor.putBoolean("slow_mode", b);
-                sEditor.apply();
-            }
-        });
+
 
 
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -97,6 +91,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    public void onClick(View view) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, ((MainActivity) getApplicationContext()).content("data.txt"));
+        shareIntent.setType("text/*");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 
 
     }

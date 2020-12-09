@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var onStartUp: Boolean = true
     private var sensitivity: Float = 5F
     private var gAcc: Float = 9.81F
-    var slow_mode = false
+
 
 
     @SuppressLint("SetTextI18n")
@@ -125,6 +125,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         zacc = event.values[2]
         xyzAcc = xacc * xacc + yacc * yacc + zacc * zacc
         xyzAcc = xyzAcc.toDouble().pow(0.5).toFloat()
+
 
 
 
@@ -166,7 +167,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         file.close()
     }
 
-    private fun content(file: String): String {
+    fun content(file: String): String {
         var t: String
         try {
             val file: FileInputStream = openFileInput(file)

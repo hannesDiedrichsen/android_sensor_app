@@ -17,4 +17,6 @@
     <string name="settings_gAccText">Ortsfaktor:</string>
     <string name="settings_gAcc_hint">z.B. 9.81</string>
     <string name="message_afterDeleteHistory">GELÖSCHT</string>
+    <string name="send_to">someone</string>
+    <string name="export_data">Datenverlauf exportieren</string>
 </resources>
