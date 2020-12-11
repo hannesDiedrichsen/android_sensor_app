@@ -194,7 +194,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
 
-
     override fun onRestart() {
         super.onRestart()
         this.recreate()

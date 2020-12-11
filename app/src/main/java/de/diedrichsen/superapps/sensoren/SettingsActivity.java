@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -95,12 +97,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public void onClick(View view) {
+    public void onClick(View view) throws FileNotFoundException {
+        FileInputStream file = openFileInput("data.txt");
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, ((MainActivity) getApplicationContext()).content("data.txt"));
         shareIntent.setType("text/*");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
+        startActivity(Intent.createChooser(shareIntent, "Teilen mit"));
 
 
     }
