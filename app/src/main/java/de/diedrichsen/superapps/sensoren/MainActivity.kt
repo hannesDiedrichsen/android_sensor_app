@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         // Reset the counter to zero
         buttonRes.setOnClickListener {
-            duration = 0.0F
+            duration = 0F
             freeFall.text = "Fallzeit: 0s"
             distTextView.text = "Fallstrecke: 0m"
             start = true
@@ -130,8 +130,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
 
         if (z % 100 == 0) {
-            xyzAccelerometer.text = "Gesamtbeschleunigung: \n $xyzAcc"
-            acceleroMeter_data.text = "X: $xacc \n Y: $yacc \n Z: $zacc"
+            xyzAccelerometer.text = "Gesamtbeschleunigung: \n${round(xyzAcc * 1000) / 1000}"
+            acceleroMeter_data.text = "X: $xacc \nY: $yacc \nZ: $zacc"
             z = 0
         }
 

@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/xyzAcc"
+        android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonRes"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +43,7 @@
 
     <Button
         android:id="@+id/buttonRes"
-        android:layout_width="219dp"
+        android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
@@ -56,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/accDataView"
+        android:textAlignment="viewStart"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
@@ -65,7 +67,7 @@
     <Button
         android:id="@+id/buttonWrite"
         android:layout_width="0dp"
-        android:layout_height="62dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
