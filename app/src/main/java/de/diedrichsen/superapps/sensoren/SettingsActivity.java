@@ -9,9 +9,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -19,17 +21,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
+
 
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final SharedPreferences sStorage = getApplicationContext().getSharedPreferences("data.pr", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor sEditor = sStorage.edit();
 
 
         // View-Elemente aus XML-Layout Datei erzeugen lassen
@@ -38,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         final TextView sView = findViewById(R.id.settingsView);
         final EditText gAcc = findViewById(R.id.settings_gAcc);
         final TextView exportData = findViewById(R.id.export_data);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") final Switch throwSwitch = findViewById(R.id.throwSwitch);
 
         // Initialisieren der App Bar und Aktivieren des Up-Buttons
         ActionBar actionBar = getSupportActionBar();
@@ -45,12 +50,10 @@ public class SettingsActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
-        final SharedPreferences sStorage = getApplicationContext().getSharedPreferences("data.pr", Context.MODE_PRIVATE);
-        final SharedPreferences.Editor sEditor = sStorage.edit();
-
         sView.setText(getString(R.string.settingsSensiText) + sStorage.getFloat("sensi", 5F));
         seekBar.setProgress((int) (sStorage.getFloat("sensi", 5F) * 10));
         gAcc.setText(String.valueOf(sStorage.getFloat("gAcc", 9.81F)));
+        throwSwitch.setChecked(sStorage.getBoolean("throw", false));
 
 
 
@@ -94,17 +97,30 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        throwSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                sEditor.putBoolean("throw", b);
+                sEditor.apply();
+            }
+        });
+
 
     }
 
-    public void onClick(View view) throws FileNotFoundException {
-        FileInputStream file = openFileInput("data.txt");
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, ((MainActivity) getApplicationContext()).content("data.txt"));
-        shareIntent.setType("text/*");
-        startActivity(Intent.createChooser(shareIntent, "Teilen mit"));
+    public void onClick(View view) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        final SharedPreferences sStorage = getApplicationContext().getSharedPreferences("data.pr", Context.MODE_PRIVATE);
 
+        String t;
+        t = sStorage.getString("t", "(No data)");
+
+        sendIntent.putExtra(Intent.EXTRA_TEXT, t);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
 
     }
 

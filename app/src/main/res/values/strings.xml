@@ -19,4 +19,5 @@
     <string name="message_afterDeleteHistory">GELÖSCHT</string>
     <string name="send_to">someone</string>
     <string name="export_data">Datenverlauf exportieren</string>
+    <string name="settings_throwModeText">Starthöhe = Endhöhe</string>
 </resources>

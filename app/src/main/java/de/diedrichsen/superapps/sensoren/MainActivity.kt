@@ -3,6 +3,7 @@ package de.diedrichsen.superapps.sensoren
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -15,6 +16,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.time.LocalDateTime
@@ -24,6 +26,7 @@ import kotlin.math.round
 
 @Suppress("NAME_SHADOWING")
 class MainActivity : AppCompatActivity(), SensorEventListener {
+
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -39,14 +42,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         showContent()
 
+        val sStorage: SharedPreferences =
+            applicationContext.getSharedPreferences("data.pr", Context.MODE_PRIVATE)
+        //val sEditor: SharedPreferences.Editor = sStorage.edit()
 
-        val sStorage = applicationContext.getSharedPreferences("data.pr", Context.MODE_PRIVATE)
-        // val sEditor = sStorage.edit()
-
-
-        // Read preferences
         sensitivity = sStorage.getFloat("sensi", 5F)
         gAcc = sStorage.getFloat("gAcc", 9.81F)
+        throwSwitch = sStorage.getBoolean("throw", false)
 
 
         // Reset the counter to zero
@@ -111,10 +113,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var dist: Float = 0.0F
     private var z = 0
     private var start: Boolean = true
-    private var onStartUp: Boolean = true
-    private var sensitivity: Float = 5F
-    private var gAcc: Float = 9.81F
-
+    private var sensitivity: Float = 0.0f
+    private var gAcc: Float = 0.0f
+    private var throwSwitch: Boolean = false
 
 
     @SuppressLint("SetTextI18n")
@@ -144,6 +145,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 // New fall record
                 duration = (stopTime - startTime) / 1000F
                 dist = round((0.5 * gAcc * duration.toDouble().pow(2.0)).toFloat() * 100) / 100
+                if (throwSwitch) {
+                    duration /= 2
+                    dist = round((0.5 * gAcc * duration.toDouble().pow(2.0)).toFloat() * 100) / 100
+                    duration *= 2
+                }
                 freeFall.text = "Dauer des freien Falls: ${round(duration * 100) / 100}s"
                 distTextView.text = "ca. ${dist}m"
 
@@ -160,7 +166,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
 
     fun write(datamode: Int, output: String, file: String) {
-        val file = openFileOutput(file, datamode)
+        val file: FileOutputStream = openFileOutput(file, datamode)
         val writer = OutputStreamWriter(file)
         writer.write(output)
         writer.close()
@@ -191,6 +197,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             textHistory.movementMethod = ScrollingMovementMethod()
             textHistory.text = content("data.txt")
         }
+        val sStorage: SharedPreferences =
+            applicationContext.getSharedPreferences("data.pr", Context.MODE_PRIVATE)
+        val sEditor: SharedPreferences.Editor = sStorage.edit()
+        sEditor.putString("t", t)
+        sEditor.apply()
     }
 
 
